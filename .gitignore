@@ -80,3 +80,9 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+codecodecoffee_release.jks
+
+keystore.properties
+
+app/google-services.json
