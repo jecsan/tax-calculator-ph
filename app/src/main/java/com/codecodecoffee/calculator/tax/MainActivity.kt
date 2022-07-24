@@ -33,18 +33,26 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.codecodecoffee.taxcalculator.BuildConfig
 import com.codecodecoffee.taxcalculator.R
 import com.codecodecoffee.taxcalculator.ui.theme.BIRTaxCalculatorTheme
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FirebaseCrashlytics.getInstance().apply {
+            this.setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
+        }
+
         setContent {
             BIRTaxCalculatorTheme {
                 BirCalculatorScreen()
 
             }
         }
+
     }
 }
 
@@ -153,7 +161,7 @@ fun BirCalculatorScreen() {
 
 @Composable
 private fun BirIntro() {
-    
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(51.dp))
         Icon(
