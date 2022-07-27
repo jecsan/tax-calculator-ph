@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -39,6 +40,10 @@ import com.codecodecoffee.taxcalculator.ui.theme.BIRTaxCalculatorTheme
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: CalculatorViewModel by viewModels()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,10 +51,12 @@ class MainActivity : ComponentActivity() {
             this.setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
         }
 
+
         setContent {
             BIRTaxCalculatorTheme {
-                BirCalculatorScreen()
-
+                BirCalculatorScreen(){
+                    viewModel.calculate(it)
+                }
             }
         }
 
@@ -58,13 +65,13 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun BirCalculatorScreen() {
+fun BirCalculatorScreen(onComputeResult: ((Double) -> TaxResult?)? = null) {
 
     val focusManager = LocalFocusManager.current
     val focusRequester = FocusRequester()
 
     var monthlyIncome by rememberSaveable { mutableStateOf("") }
-    var result by rememberSaveable { mutableStateOf<BirResult?>(null) }
+    var result by rememberSaveable { mutableStateOf<TaxResult?>(null) }
 
     // A surface container using the 'background' color from the theme
     Surface(
@@ -132,7 +139,7 @@ fun BirCalculatorScreen() {
 
                     Button(onClick = {
                         monthlyIncome.toDoubleOrNull()?.apply {
-                            result = BirCalculator.calculate(this)
+                            result = onComputeResult?.invoke(this)
                             focusManager.clearFocus()
                         }
 

@@ -15,7 +15,7 @@ import java.util.*
 
 
 @Composable
-fun ResultContent(result: BirResult) {
+fun ResultContent(result: TaxResult) {
 
     val numberFormatter = NumberFormat.getCurrencyInstance(Locale("en", "PH"))
 
