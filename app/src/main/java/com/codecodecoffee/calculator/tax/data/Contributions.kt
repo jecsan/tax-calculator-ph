@@ -26,9 +26,9 @@ data class PhilHealthContribution(
 
 
 val philHealthTable = listOf(
-    PhilHealthContribution(min = 0.0, max = 10000.0, multiplier = null, value = 300.0),
-    PhilHealthContribution(min = 10000.01, max = 59999.99, multiplier = 0.03, divideBy = 2.0),
-    PhilHealthContribution(min = 60000.00, max = Double.MAX_VALUE, null, null, 1800.0),
+    PhilHealthContribution(min = 0.0, max = 10000.0, multiplier = null, value = 400.0),
+    PhilHealthContribution(min = 10000.01, max = 79999.99, multiplier = 0.04),
+    PhilHealthContribution(min = 80000.00, max = Double.MAX_VALUE, null, null, 3200.0),
 )
 
 val pagIbigTable = listOf(
