@@ -24,12 +24,13 @@ object TaxCalculator {
         for (philHealthContribution in philHealthTable) {
             if (salary in philHealthContribution.min..philHealthContribution.max) {
                 value =  philHealthContribution.value
-                    ?: ((salary * philHealthContribution.multiplier!!) / philHealthContribution.divideBy!!)
+                    ?: ((salary * philHealthContribution.multiplier!!))
                 break
             }
         }
 
-        return  value
+        //Value is divided between employee and employer
+        return  value/2.0
     }
 
     private fun getPagIBIGContribution(salary: Double): Double {
