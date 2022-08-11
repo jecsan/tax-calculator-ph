@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,13 +55,43 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BIRTaxCalculatorTheme {
-                BirCalculatorScreen(){
+                BirCalculatorScreen() {
                     viewModel.calculate(it)
                 }
             }
         }
 
     }
+}
+
+val taxResultSaver = run {
+    val sssKey = "sss"
+    val philHealthKey = "philHealth"
+    val pagibigKey = "pagibig"
+    val incomeTaxKey = "incomeTax"
+    val netPayAfterDeductionsKey = "netPayAfterDeductions"
+
+    mapSaver<TaxResult?>(save = {
+        mapOf(
+            sssKey to it?.sss,
+            philHealthKey to it?.philHealth,
+            pagibigKey to it?.pagibig,
+            incomeTaxKey to it?.incomeTax,
+            netPayAfterDeductionsKey to it?.netPayAfterDeductions
+        )
+    }, restore = { map ->
+        if (map.values.all { it == null })
+            null
+        else
+            TaxResult(
+                map[sssKey] as Double,
+                map[philHealthKey] as Double,
+                map[pagibigKey] as Double,
+                map[incomeTaxKey] as Double,
+                map[netPayAfterDeductionsKey] as Double
+            )
+    })
+
 }
 
 
@@ -71,7 +102,11 @@ fun BirCalculatorScreen(onComputeResult: ((Double) -> TaxResult?)? = null) {
     val focusRequester = FocusRequester()
 
     var monthlyIncome by rememberSaveable { mutableStateOf("") }
-    var result by rememberSaveable { mutableStateOf<TaxResult?>(null) }
+    var result: TaxResult? by rememberSaveable(stateSaver = taxResultSaver) {
+        mutableStateOf(
+            null
+        )
+    }
 
     // A surface container using the 'background' color from the theme
     Surface(
@@ -97,17 +132,15 @@ fun BirCalculatorScreen(onComputeResult: ((Double) -> TaxResult?)? = null) {
                     modifier = Modifier
                         .padding(5.dp)
                         .padding(horizontal = 7.dp)
-                        .padding(bottom = 7.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(bottom = 7.dp), horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(11.dp))
 
 
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .focusRequester(focusRequester)
-                            .padding(horizontal = 5.dp),
+                    OutlinedTextField(modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+                        .padding(horizontal = 5.dp),
                         value = monthlyIncome,
                         onValueChange = {
                             monthlyIncome = it
@@ -132,8 +165,7 @@ fun BirCalculatorScreen(onComputeResult: ((Double) -> TaxResult?)? = null) {
                                     contentDescription = "Clear"
                                 )
                             }
-                        }
-                    )
+                        })
 
                     Spacer(modifier = Modifier.height(11.dp))
 
