@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -118,7 +119,7 @@ fun BirCalculatorScreen(onComputeResult: ((Double) -> TaxResult?)? = null) {
         ) {
 
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(11.dp))
 
 
             Card(
@@ -145,13 +146,20 @@ fun BirCalculatorScreen(onComputeResult: ((Double) -> TaxResult?)? = null) {
                         onValueChange = {
                             monthlyIncome = it
                         },
-                        textStyle = TextStyle(fontSize = 17.sp),
+                        textStyle = TextStyle(fontSize = 19.sp),
                         label = { Text(text = "Monthly Income") },
+
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number,
                             autoCorrect = false,
-                            imeAction = ImeAction.Done
+                            imeAction = ImeAction.Go
                         ),
+                        keyboardActions = KeyboardActions(onGo = {
+                            monthlyIncome.toDoubleOrNull()?.apply {
+                                result = onComputeResult?.invoke(this)
+                                focusManager.clearFocus()
+                            }
+                        }),
                         trailingIcon = {
 
                             IconButton(onClick = {

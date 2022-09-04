@@ -51,7 +51,7 @@ fun ResultContent(result: TaxResult) {
                 value = numberFormatter.format(result.philHealth),
                 onValueChange = {},
                 readOnly = true,
-                label = { Text(text = "Philhealth   ") },
+                label = { Text(text = "Philhealth") },
             )
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -83,8 +83,7 @@ fun ResultContent(result: TaxResult) {
 
     Card(
         modifier = Modifier
-            .padding(horizontal = 31.dp)
-            .padding(top = 11.dp),
+            .padding(horizontal = 31.dp),
         elevation = 5.dp,
     ) {
 
